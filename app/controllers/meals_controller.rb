@@ -1,14 +1,13 @@
 class MealsController < ApplicationController
-  before_action :set_meal, only: %i[show edit update destroy]
-
   respond_to :html
 
   def index
-    @meals = Meal.all
+    @meals = current_user.meals.all
     respond_with(@meals)
   end
 
   def show
+    @meal = Meal.find(params[:id])
     respond_with(@meal)
   end
 
@@ -17,31 +16,45 @@ class MealsController < ApplicationController
     respond_with(@meal)
   end
 
-  def edit; end
+  def edit
+    @meal = current_user.meals.find(params[:id])
+  end
 
   def create
-    @meal = Meal.new(meal_params)
-    @meal.save
-    respond_with(@meal)
+    @meal = current_user.meals.build(meal_params)
+
+    if @meal.save
+      respond_with(@meal)
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def update
-    @meal.update(meal_params)
-    respond_with(@meal)
+    @meal = current_user.meals.find(params[:id])
+
+    if @meal.update(meal_params)
+      respond_with(@meal)
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   def destroy
+    @meal = current_user.meals.find(params[:id])
+
     @meal.destroy
-    respond_with(@meal)
+    redirect_to root_path
   end
 
   private
 
-  def set_meal
-    @meal = Meal.find(params[:id])
-  end
-
   def meal_params
-    params.require(:meal).permit(:heat_rating, :cuisine_type, :recency_weight)
+    params.require(:meal).permit(
+      :name,
+      :heat_rating,
+      :cuisine_type,
+      :recency_weight
+    )
   end
 end
