@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
-  root "meals#index"
+  devise_for :users
+
+  devise_scope :user do
+    authenticated :user do
+      root "meals#index"
+    end
+
+    unauthenticated do
+      root "devise/sessions#new", as: :unauthenticated_root
+    end
+  end
 
   resources :meals
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
 end
