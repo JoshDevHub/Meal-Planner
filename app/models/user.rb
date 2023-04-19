@@ -24,4 +24,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :meals, dependent: :destroy
+
+  validates :username, presence: true, length: { in: 3..20 }
+  validates :email, presence: true, uniqueness: true
 end
