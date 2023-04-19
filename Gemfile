@@ -19,6 +19,7 @@ gem "turbo-rails"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
 
 group :development, :test do
+  gem "capybara"
   gem "debug", platforms: %i[mri mingw x64_mingw]
   gem "factory_bot_rails"
   gem "rspec-rails"
@@ -26,6 +27,7 @@ group :development, :test do
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
   gem "rubocop-rspec", require: false
+  gem "webdrivers"
 end
 
 group :development do
